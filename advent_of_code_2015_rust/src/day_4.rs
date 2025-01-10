@@ -15,7 +15,7 @@ pub fn day_4() {
 
         let result_str = hex::encode(result);
 
-        if result_str.starts_with("00000") {
+        if result_str.starts_with("000000") {
             break;
         }
 
