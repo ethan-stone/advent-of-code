@@ -21,29 +21,62 @@ pub fn day_3() -> Result<(), Box<dyn Error>> {
 
     coord_map.insert("0,0".to_string(), 1);
 
-    let mut x = 0;
-    let mut y = 0;
+    let mut santa_x = 0;
+    let mut santa_y = 0;
+
+    let mut robo_santa_x = 0;
+    let mut robo_santa_y = 0;
+
+    // 0 is Santa
+    // 1 is Robo Santa
+    let mut whos_move = 0;
 
     for character in input.chars() {
-        if character == '^' {
-            y += 1;
-        }
-        if character == 'v' {
-            y -= 1;
-        }
-        if character == '>' {
-            x += 1;
-        }
-        if character == '<' {
-            x -= 1;
-        }
+        if whos_move == 0 {
+            if character == '^' {
+                santa_y += 1;
+            }
+            if character == 'v' {
+                santa_y -= 1;
+            }
+            if character == '>' {
+                santa_x += 1;
+            }
+            if character == '<' {
+                santa_x -= 1;
+            }
 
-        let key = format!("{x},{y}");
+            let key = format!("{santa_x},{santa_y}");
 
-        match coord_map.get(&key) {
-            Some(val) => coord_map.insert(key, val + 1),
-            None => coord_map.insert(key, 1),
-        };
+            match coord_map.get(&key) {
+                Some(val) => coord_map.insert(key, val + 1),
+                None => coord_map.insert(key, 1),
+            };
+
+            whos_move = 1;
+        } else if whos_move == 1 {
+            if character == '^' {
+                robo_santa_y += 1;
+            }
+            if character == 'v' {
+                robo_santa_y -= 1;
+            }
+            if character == '>' {
+                robo_santa_x += 1;
+            }
+            if character == '<' {
+                robo_santa_x -= 1;
+            }
+
+            let key = format!("{robo_santa_x},{robo_santa_y}");
+
+            match coord_map.get(&key) {
+                Some(val) => coord_map.insert(key, val + 1),
+                None => coord_map.insert(key, 1),
+            };
+
+            whos_move = 0;
+        }
     }
 
     let num_houses = coord_map.keys().len();
