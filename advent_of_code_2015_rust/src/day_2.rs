@@ -1,6 +1,5 @@
 use std::{error::Error, fs};
 
-// https://adventofcode.com/2015/day/2
 pub struct PresentBox {
     length: u32,
     width: u32,
@@ -71,6 +70,7 @@ impl PresentBox {
     }
 }
 
+// https://adventofcode.com/2015/day/2
 pub fn day_2() -> Result<(), Box<dyn Error>> {
     let input = fs::read_to_string("./src/day_2_input.txt")?;
 
