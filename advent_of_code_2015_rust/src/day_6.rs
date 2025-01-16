@@ -1,20 +1,8 @@
 use std::error::Error;
-use std::{fs, vec};
+use std::{cmp, fs, vec};
 
-fn get_coord_index(row: usize, col: usize, width: usize) -> usize {
-    row * width + col
-}
-
-fn count_true(v: &Vec<bool>) -> usize {
-    let mut count = 0;
-
-    for b in v {
-        if *b {
-            count += 1;
-        }
-    }
-
-    count
+fn get_brightness(v: &Vec<i32>) -> i32 {
+    v.iter().sum()
 }
 
 pub fn day_6() -> Result<(), Box<dyn Error>> {
@@ -26,12 +14,12 @@ pub fn day_6() -> Result<(), Box<dyn Error>> {
     // index = row * W + col        # 2D to 1D
     // row = index // W            # 1D to 2D row
     // col = index % W             # 1D to 2D column
-    let mut grid: Vec<bool> = vec![];
+    let mut grid: Vec<i32> = vec![];
 
     let num_of_coords = 1000 * 1000;
 
     for _ in 0..num_of_coords {
-        grid.push(false);
+        grid.push(0);
     }
 
     for line in input.lines() {
@@ -58,7 +46,7 @@ pub fn day_6() -> Result<(), Box<dyn Error>> {
             }
 
             for idx in indices_to_flip {
-                grid[idx] = !grid[idx];
+                grid[idx] = grid[idx] + 2;
             }
         } else {
             let starting_point: Vec<usize> = parts[2]
@@ -81,17 +69,20 @@ pub fn day_6() -> Result<(), Box<dyn Error>> {
 
             if parts[1] == "on" {
                 for idx in indices_to_turn_on_or_off {
-                    grid[idx] = true;
+                    grid[idx] = grid[idx] + 1;
                 }
             } else if parts[1] == "off" {
                 for idx in indices_to_turn_on_or_off {
-                    grid[idx] = false;
+                    grid[idx] = cmp::max(0, grid[idx] - 1);
                 }
             }
         }
     }
 
-    println!("Day 6: {} lights are on.", count_true(&grid));
+    println!(
+        "Day 6: The brightness of the lights is {}",
+        get_brightness(&grid)
+    );
 
     Ok(())
 }
